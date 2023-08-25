@@ -3,11 +3,49 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import Header from './components/Header';
+import Auth from './components/Login';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import Register from './components/Register';
+const Layout = ({ children }) => {
+  return (
+   <>
+    <Header />
+    {children}
+    
+    </>
+  );
+};
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout/> ,
+    children:[
+      {
+        path:"/",
+        element:<App/>,
+      
+      },
+      {
+        path:'/login',
+        element:<Auth/>,
+       
+
+      },
+      {
+        path:'/register',
+        element:<Register/>,
+       
+
+      }]}]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router}/>
   </React.StrictMode>
 );
 
