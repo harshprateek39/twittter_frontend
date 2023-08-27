@@ -31,9 +31,11 @@ export default function SignIn() {
       email:data.get("email"),
       password:data.get("password")
    });
-   setCookies("access",response.data.token);
-   window.localStorage.setItem("userID",response.data.userID);
-   window.localStorage.setItem("userDetail",JSON.stringify(response.data.userDetail));
+   if(response.data.message){  alert(response.data.message);  return;}
+    console.log(response.data.message);
+   setCookies("access",response?.data?.token);
+   window.localStorage.setItem("userID",response?.data?.userID);
+   window.localStorage.setItem("userDetail",JSON.stringify(response?.data?.userDetail));
   navigate('/');
 
    } catch (error) {
