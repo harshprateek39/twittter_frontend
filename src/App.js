@@ -31,7 +31,7 @@ function App() {
     const fetchpost =async()=>{
       try {
       
-        const response = await axios.get("http://localhost:8000/api/v1/tweet");
+        const response = await axios.get("https://twitter-nackend-git-main-harshprateek39.vercel.app/api/v1/tweet");
          setTweets(response.data); 
        
         
@@ -46,7 +46,7 @@ function App() {
   const handleSubmit = async()=>{
     try {
        setLoading(true);
-      const data= await axios.post('http://localhost:8000/api/v1/tweet',{
+      const data= await axios.post('https://twitter-nackend-git-main-harshprateek39.vercel.app/api/v1/tweet',{
         image: selectedImage,
         description,
         userOwner: localStorage.getItem('userID'),

@@ -40,7 +40,7 @@ export default function SignUp() {
     event.preventDefault();
     const fdata = new FormData(event.currentTarget);
      try {
-      const data= await axios.post('http://localhost:8000/api/v1/auth/register',{
+      const data= await axios.post('https://twitter-nackend-git-main-harshprateek39.vercel.app/api/v1/auth/register',{
         name: fdata.get('name'),
         email: fdata.get('email'),
         password: fdata.get('password'),

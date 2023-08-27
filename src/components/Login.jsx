@@ -27,7 +27,7 @@ export default function SignIn() {
     const data = new FormData(event.currentTarget);
    try {
     console.log(data.get("password"));
-    const response =await axios.post("http://localhost:8000/api/v1/auth/login", {
+    const response =await axios.post("https://twitter-nackend-git-main-harshprateek39.vercel.app/api/v1/auth/login", {
       email:data.get("email"),
       password:data.get("password")
    });
