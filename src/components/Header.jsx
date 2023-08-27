@@ -62,8 +62,8 @@ const Header = () => {
       </div>}
 
       
-      {isTabletOrMobile &&  <div className="App flex justify-between p-3 bg-transparent text-white relative  ">
-      {login&& <div   className="absolute right-10 top-12 flex flex-col outline-1 outline-white ring-1 ring-white rounded-sm px-3 py-3 z-10 bg-slate-900" >
+      {isTabletOrMobile &&  <div className="App flex justify-between p-3 bg-transparent text-white relative">
+      {login&& <div   className="absolute right-0 left-0 top-12 flex flex-col outline-1 outline-white ring-1 ring-white rounded-sm px-3 py-3 z-10 bg-slate-900" >
       
   <h1 className=" cursor-pointer" onClick={ ()=>{ navigate('/login') ; setLogin(!login)}} > {cookies.access?parsedData.name:"Login"}</h1> 
   {cookies.access?<h1 className=" cursor-pointer" onClick={logout}>Logout</h1>:<></>}
@@ -78,7 +78,7 @@ const Header = () => {
               ></img>
               <h1>{cookies.access?parsedData.name:"Login"}</h1>
             </div>
-            <button> <IoMdArrowDropdown/></button>
+            <button  onClick={ ()=>setLogin(!login)}> <IoMdArrowDropdown/></button>
           </div>
         </div>
 

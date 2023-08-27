@@ -1,6 +1,9 @@
 import logo from "./logo.svg";
 import "./App.css";
 import { TbPhotoFilled } from "react-icons/tb";
+import { ToastContainer } from "react-toastify";
+	
+import { toast } from "react-toastify";
 import {
   BsFillPlayCircleFill,
   BsThreeDots,
@@ -21,39 +24,47 @@ import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
 function App() {
+  const navigate = useNavigate();
   const [ tweets, setTweets]=useState([]);
+  const [loading, setLoading] = useState(false);
   useEffect(()=>{
     const fetchpost =async()=>{
       try {
+      
         const response = await axios.get("http://localhost:8000/api/v1/tweet");
-         setTweets(response.data);
+         setTweets(response.data); 
        
         
       } catch (error) { 
         console.log(error); 
       }
-    } 
-    
-    fetchpost();
-      },[]);
+    }  
+       
+    fetchpost()
+      },[]);  
 
   const handleSubmit = async()=>{
     try {
-      
+       setLoading(true);
       const data= await axios.post('http://localhost:8000/api/v1/tweet',{
         image: selectedImage,
         description,
         userOwner: localStorage.getItem('userID'),
 
-      },{headers:{authorization:cookies.access}});
+      },{headers:{'authorization':cookies.access}});
+       if(data){setLoading(false);}
+       
       
-      console.log(data.data);
-      alert("Posted")
+      alert("Posted");
+      window.location.reload();
      } catch (error) {
+      setLoading(false);
+     alert("Authentication Failed")
+      
        console.log("cerror", error);
      }
   }
-  const navigate = useNavigate();
+  
   const [cookies, setCookies] = useCookies(["access"]);
   const [isExpanded, setIsExpanded] = useState(false);
   const storedData = localStorage.getItem("userDetail");
@@ -78,6 +89,7 @@ function App() {
   };
   return (
     <div className="App text-white grid lg:grid-cols-4 gap-3 lg:px-14  px-2 grid-cols-1 ">
+    
       {/* user */}
       {cookies.access ? (
         <div className=" bg-slate-800 rounded-lg  grow-0 userCard">
@@ -139,7 +151,8 @@ function App() {
 
       {/* tweet  section */}
       <div className=" md:col-span-2   ">
-        <div className=" flex bg-slate-800 rounded-lg flex-col p-3 ">
+        <div className=" flex bg-slate-800 rounded-lg flex-col p-3 relative">
+        {loading&&<div className=" bg-slate-950 absolute h-32 left-0  right-0 top-0 flex items-center justify-center text-3xl font-semibold"> Processing</div>}
           <div className=" flex justify-between gap-3 items-center ">
             <input
               onChange={(e) => setDescription(e.target.value)}
@@ -201,13 +214,15 @@ function App() {
         </div>
         {/* tweets */}
 
-        {tweets.map((item) => {
+        {tweets?.map((item) => {
           return (
             <Tweets
               name={item.name}
               text={item.description}
               image={item.userImage}
               user={item.email}
+            picture={item.image}
+            date={item.date}
               
             />
           );

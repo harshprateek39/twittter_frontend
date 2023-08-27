@@ -26,6 +26,7 @@ export default function SignIn() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
    try {
+    console.log(data.get("password"));
     const response =await axios.post("http://localhost:8000/api/v1/auth/login", {
       email:data.get("email"),
       password:data.get("password")
@@ -36,7 +37,8 @@ export default function SignIn() {
   navigate('/');
 
    } catch (error) {
-    console.log(error);
+    
+    console.log("login Error",error);
    }
   };
 

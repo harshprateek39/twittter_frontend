@@ -7,7 +7,9 @@ import {FaCommentDots} from 'react-icons/fa';
 import { useMediaQuery } from 'react-responsive';
 
 
-const Tweets = ({image , comments, text , time  ,name ,user ,likes }) => {
+const Tweets = ({image , comments, text , time  ,name ,user ,likes,picture ,date}) => {
+  const crrDate= new Date();
+  console.log(date);
     const isDesktopOrLaptop = useMediaQuery({
         query: '(min-width: 767.25px)'
       });
@@ -56,6 +58,7 @@ const Tweets = ({image , comments, text , time  ,name ,user ,likes }) => {
         </button>
        
         </div>
+        {picture?.url&&<img className=' w-56 rounded-md bg-slate-900 h-64 object-contain' src={ picture?.url}></img>}
        </div>
       </div>
     </>
