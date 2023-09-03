@@ -1,5 +1,6 @@
+import axios from 'axios';
 import React, { useState } from 'react';
-
+import { useCookies } from 'react-cookie';
 import {BsThreeDots,BsFillHeartFill,BsShareFill} from 'react-icons/bs';
 import {FaUpload,FaRetweet} from 'react-icons/fa';
 
@@ -7,9 +8,11 @@ import {FaCommentDots} from 'react-icons/fa';
 import { useMediaQuery } from 'react-responsive';
 
 
-const Tweets = ({image , comments, text , time  ,name ,user ,likes,picture ,date}) => {
+const Tweets = ({image , comments, text , time  ,name ,user ,likes,picture ,date,id}) => {
+  const [cookies, setCookies] = useCookies(["access"]);
+  const [likeCount,setLikeCount] = useState(likes?.length)
   const crrDate= new Date();
-  console.log(date);
+  
     const isDesktopOrLaptop = useMediaQuery({
         query: '(min-width: 767.25px)'
       });
@@ -17,6 +20,22 @@ const Tweets = ({image , comments, text , time  ,name ,user ,likes,picture ,date
     const toggleReadMore = () => {
       setIsExpanded(!isExpanded);
     };
+    const likefn = async(id)=>{
+      try {
+        
+        const data= await axios.put(`http://localhost:8000/api/v1/tweet/${id}`,{id:window.localStorage.getItem('userID')});
+
+        
+       if(data.data.value==="added"){setLikeCount(likeCount+1)}
+       if(data.data.value==="deleted"){setLikeCount(likeCount-1)}
+       
+
+      } catch (error) {
+         console.log(error);
+      }
+      
+    } 
+    
   return (
     <>
         <div className=' flex bg-slate-800 rounded-lg  p-3 my-2 gap-4 justify-between '>
@@ -35,14 +54,14 @@ const Tweets = ({image , comments, text , time  ,name ,user ,likes,picture ,date
         </div>
 
         <div className=' flex flex-col items-start'>
-          <p className=' text-left'> {isExpanded?text: `${text.slice(0,100)}...`}</p>
-          <button  className=' text-blue-600' onClick={toggleReadMore}>{isExpanded?"Read less":"Read more"}</button>
+          <p className=' text-left'> {isExpanded?text: text.length>100?`${text.slice(0,50)}...`:text}</p>
+          <button  className=' text-blue-600' onClick={toggleReadMore}>{isExpanded?"Read less":text.length>100?"Read more":""}</button>
         </div>
      
         <div className=' flex justify-between items-center   my-2 gap-2 '>
-        <button className=' flex   gap-2 bg-slate-700  py-2 rounded-lg grow justify-center items-center hover:bg-slate-600 '>
+        <button className=' flex   gap-2 bg-slate-700  py-2 rounded-lg grow justify-center items-center hover:bg-slate-600 ' onClick={()=>likefn(id)}>
            <BsFillHeartFill/>
-          { isDesktopOrLaptop&& <span>Like</span>  }
+          { <span>{likeCount}</span>}
         </button>
         <button className=' flex   gap-2 bg-slate-700  py-2 rounded-lg grow justify-center items-center hover:bg-slate-600 '>
            <FaRetweet/>
