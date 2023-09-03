@@ -23,7 +23,7 @@ const Tweets = ({image , comments, text , time  ,name ,user ,likes,picture ,date
     const likefn = async(id)=>{
       try {
         
-        const data= await axios.put(`https://twitter-nackend-git-main-harshprateek39.vercel.app/api/v1/tweet/${id}`,{id:window.localStorage.getItem('userID')});
+        const data= await axios.put(`https://twitter-nackend-git-main-harshprateek39.vercel.app/api/v1/tweet/${id}`,{id:window.localStorage.getItem('userID')},{headers:{'authorization':cookies.access}});
 
         
        if(data.data.value==="added"){setLikeCount(likeCount+1)}
@@ -31,7 +31,7 @@ const Tweets = ({image , comments, text , time  ,name ,user ,likes,picture ,date
        
 
       } catch (error) {
-         console.log(error);
+         alert("login required for this action")
       }
       
     } 
