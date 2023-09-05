@@ -49,7 +49,7 @@ function App() {
   const handleSubmit = async()=>{
     try {
        setLoading(true);
-      const data= await axios.post('http://localhost:8000/api/v1/tweet',{
+      const data= await axios.post('https://twitter-nackend-git-main-harshprateek39.vercel.app/api/v1/tweet',{
         image: selectedImage,
         description,
         userOwner: localStorage.getItem('userID'),
