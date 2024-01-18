@@ -74,7 +74,7 @@ const Tweets = ({image , comments, text , time  ,name ,user ,likes,picture ,date
             <h2 className=' text-sm  text-gray-300'> @{user}</h2>
           </div>
           <button onClick={()=>{setMenu(!menu);  }}> <BsThreeDots className=' text-2xl font-bold text-gray-300 relative'/>
-           {menu&&<div className=' absolute rounded-xl z-50  bg-black flex justify-start flex-col'>
+           {menu&&<div className=' absolute rounded-xl z-50  bg-black flex justify-start flex-col right-2 '>
             {  legal? <button onClick={()=>deleteTweet(id)} className=' ring-1 ring-white p-3 rounded-xl font-semibold '>Delete</button>:<span className=' ring-1 ring-white p-3 rounded-xl text-gray-500'>No Action</span>}
             
           </div> }</button>
