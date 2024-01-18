@@ -13,13 +13,15 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {useCookies} from "react-cookie";
 import { useNavigate } from 'react-router-dom';
-
+import { Context } from '../Context';
+ import { useContext } from 'react';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
 
  
 export default function SignIn() {
+  const context=useContext(Context);
   const [cookies, setCookies] =useCookies(["access"]);
   const navigate=useNavigate();
   const handleSubmit = async (event) => {
@@ -34,6 +36,7 @@ export default function SignIn() {
    if(response.data.message){  alert(response.data.message);  return;}
     console.log(response.data.message);
    setCookies("access",response?.data?.token);
+   context.setCurrentUser(response.data.userID);
    window.localStorage.setItem("userID",response?.data?.userID);
    window.localStorage.setItem("userDetail",JSON.stringify(response?.data?.userDetail));
   navigate('/');

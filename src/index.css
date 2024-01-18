@@ -10,10 +10,29 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #06141D;
 }
-body::-webkit-scrollbar {
-  display: none;
-}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.animation {
+  animation-name: example;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  background: linear-gradient(to right, rgba(47, 48, 48 ,0.2), rgb(128, 128, 128 ,0.2),rgba(72, 71, 71 ,0.2));
+  background-size: 500% 100%;
+}
+
+@keyframes example {
+  0% {
+    background-position: -100% 0;
+  }
+  50%{
+    background-position: -50% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+

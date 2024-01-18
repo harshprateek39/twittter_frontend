@@ -5,11 +5,13 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Header from './components/Header';
 import Auth from './components/Login';
+
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
 import Register from './components/Register';
+import { ContextProvider } from './Context';
 const Layout = ({ children }) => {
   return (
    <>
@@ -44,9 +46,10 @@ const router = createBrowserRouter([
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+   <ContextProvider>
     <RouterProvider router={router}/>
-  </React.StrictMode>
+    </ContextProvider>
+  
 );
 
 // If you want to start measuring performance in your app, pass a function
