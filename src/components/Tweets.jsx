@@ -7,12 +7,15 @@ import { Context } from '../Context';
 import {FaCommentDots} from 'react-icons/fa';
 import { useMediaQuery } from 'react-responsive';
 import Comment from './Comment';
-
-
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from 'react-router-dom';
 
 const Tweets = ({image , comments, text , time  ,name ,user ,likes,picture ,date,id,owner}) => {
+  const navigate=useNavigate();
   const context=useContext(Context);
   const [cookies, setCookies] = useCookies(["access"]);
+  const [liked,setLiked]=useState(false);
   const [likeCount,setLikeCount] = useState(likes?.length);
   const [loading,setLoading] = useState(false); 
   const[menu,setMenu]=useState(false);
@@ -39,18 +42,31 @@ const Tweets = ({image , comments, text , time  ,name ,user ,likes,picture ,date
         console.log(error);
       }
     }
+    const likeCheck=async()=>{
+      try {
+        console.log(id);
+      
+        const val= await axios.put(`https://twitter-nackend-git-main-harshprateek39.vercel.app/api/v1/tweet/likeCheck/${id}`,{id:context.currentUser});
+        console.log(val.data);
+        setLiked(val.data.value);
+       } 
+       catch (error) {
+        console.log(error);
+       }
+        
+    }
     const likefn = async(id)=>{
       try {
          setLoading(true);
+
         const data= await axios.put(`https://twitter-nackend-git-main-harshprateek39.vercel.app/api/v1/tweet/${id}`,{id:window.localStorage.getItem('userID')},{headers:{'authorization':cookies.access}});
-
-        
-       if(data.data.value==="added"){setLikeCount(likeCount+1)}
-       if(data.data.value==="deleted"){setLikeCount(likeCount-1)}
-       
-
+       if(data.data.value==="added"){setLikeCount(likeCount+1); likeCheck();}
+       if(data.data.value==="deleted"){setLikeCount(likeCount-1); likeCheck();}    
       } catch (error) {
-         alert("login required for this action")
+         toast.error("Please Login",{position: "top-center"});
+          setTimeout(() => {
+             navigate('/login');
+          }, 1000);
       }
       finally{
    setLoading(false);
@@ -58,14 +74,16 @@ const Tweets = ({image , comments, text , time  ,name ,user ,likes,picture ,date
       
     } 
     useEffect(()=>{
+       if(window.localStorage.getItem('userID')) {likeCheck();}
         if(owner==context.currentUser){
           setLegal(true);
         }
     },[context.currentUser])
     
   return (
-    <> {loading?<h1> loading</h1>:
+    <> {
         <div className=' flex bg-slate-800 rounded-lg  p-3 my-2 gap-4 justify-between '>
+       
        <img className=' aspect-square h-12 rounded-full  grow-0 ' src={image}></img>
        <div className=' flex flex-col w-full  '>
         <div className='flex justify-between  '>
@@ -73,9 +91,9 @@ const Tweets = ({image , comments, text , time  ,name ,user ,likes,picture ,date
             <h1 className=' text-lg font-semibold'>{name}</h1> 
             <h2 className=' text-sm  text-gray-300'> @{user}</h2>
           </div>
-          <button onClick={()=>{setMenu(!menu);  }}> <BsThreeDots className=' text-2xl font-bold text-gray-300 relative'/>
+          <button onClick={()=>{setMenu(!menu);  }} className='relative'> <BsThreeDots className=' text-2xl font-bold text-gray-300 '/>
            {menu&&<div className=' absolute rounded-xl z-50  bg-black flex justify-start flex-col right-2 '>
-            {  legal? <button onClick={()=>deleteTweet(id)} className=' ring-1 ring-white p-3 rounded-xl font-semibold '>Delete</button>:<span className=' ring-1 ring-white p-3 rounded-xl text-gray-500'>No Action</span>}
+            {  legal? <button onClick={()=>deleteTweet(id)} className=' ring-1 ring-white p-3 rounded-xl font-semibold '>Delete</button>:<span className=' ring-1 ring-white whitespace-nowrap p-3 rounded-xl text-gray-500'>No Action</span>}
             
           </div> }</button>
         </div>
@@ -93,8 +111,8 @@ const Tweets = ({image , comments, text , time  ,name ,user ,likes,picture ,date
           <button  className=' text-blue-600' onClick={toggleReadMore}>{isExpanded?"Read less":text.length>100?"Read more":""}</button>
         </div>
         <div className=' flex justify-between items-center   my-2 gap-2 '>
-        <button className=' flex   gap-2 bg-slate-700  py-2 rounded-lg grow justify-center items-center hover:bg-slate-600 ' onClick={()=>likefn(id)}>
-           <BsFillHeartFill/>
+        <button className=' flex   gap-2 bg-slate-700  py-2 rounded-lg grow justify-center items-center hover:bg-slate-600  ' onClick={()=>likefn(id)}>
+           <BsFillHeartFill className={liked?' text-cyan-500':''}  />
           { <span>{likeCount}</span>}
         </button>
         <button className=' flex  cursor-not-allowed opacity-40  gap-2 bg-slate-700  py-2 rounded-lg grow justify-center items-center hover:bg-slate-600 '>

@@ -12,10 +12,12 @@ import {
 } from "react-router-dom";
 import Register from './components/Register';
 import { ContextProvider } from './Context';
+import { ToastContainer } from 'react-toastify';
 const Layout = ({ children }) => {
   return (
    <>
     <Header />
+    
     {children}
     
     </>

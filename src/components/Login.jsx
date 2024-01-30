@@ -15,6 +15,7 @@ import {useCookies} from "react-cookie";
 import { useNavigate } from 'react-router-dom';
 import { Context } from '../Context';
  import { useContext } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -44,12 +45,14 @@ export default function SignIn() {
    } catch (error) {
     
     console.log("login Error",error);
+    toast.error("Server Error",{ position:'top-center'});
    }
   };
 
   return (
     
       <Container component="main" maxWidth="sm"  className=' rounded-lg bg-white'>
+        <ToastContainer></ToastContainer>
         <CssBaseline />
         <Box
           sx={{

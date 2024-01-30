@@ -21,6 +21,7 @@ import { Cookies } from "react-cookie";
 import { useCookies } from "react-cookie";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+
 import axios from "axios";
 import LoadingTweet from "./components/LoadingTweet";
 import { Context } from "./Context";
@@ -44,7 +45,9 @@ function App() {
       setOffset(prev => prev + 4);
     }
   };
+  useEffect(()=>{context.setTweets([]); },[]);
   useEffect(() => {
+  
   context.setCurrentUser(window.localStorage.getItem("userID"));
    fetchpost();
     window.addEventListener('scroll', handleScroll);
@@ -97,14 +100,10 @@ function App() {
        }, 1000);
      }
   }
-  
- 
-
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     setFileToBase(file);
   };
-
   const setFileToBase = (file) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -117,15 +116,16 @@ function App() {
     setIsExpanded(!isExpanded);
   };
   return (
+    <>
+    <ToastContainer  />
     <div className="App text-white grid lg:grid-cols-4 gap-3 lg:px-14  px-2 grid-cols-1 ">
+     
      {loading&&(<div className=" bg-black/60 fixed h-[100vh] left-0 top-0 w-[100vw] z-50 flex justify-center items-center">
         {posterror?<h1 className=" md:text-5xl font-bold text-2xl">Error</h1>:<LoadingIcons.Circles/>}
      </div>)}
-     
       {/* user */}
       {cookies.access ? (
-        <div className=" bg-slate-800 rounded-lg  grow-0 userCard">
-        
+        <div className=" bg-slate-800 rounded-lg  grow-0 userCard">        
           <div className="  grid grid-flow-row rounded-lg  relative">
             <div className=" bg-sky-500 rounded-t-lg h-36 "></div>
             <div className="flex flex-col justify-end items-center h-36 ">
@@ -298,7 +298,7 @@ function App() {
           </div>
         </div>
       </div>
-    </div>
+    </div></>
   );
 }
 

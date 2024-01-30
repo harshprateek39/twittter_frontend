@@ -14,6 +14,9 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
 import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import LoadingIcons from 'react-loading-icons';
 
 
 
@@ -22,8 +25,9 @@ import axios from 'axios';
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+  const navigate =useNavigate();
   const [selectedImage, setSelectedImage] = useState(null);
-  
+  const [loading,setLoading]=useState(false);
     const handleImageChange = (event) => {
       const file = event.target.files[0];
        setFileToBase(file)
@@ -38,6 +42,7 @@ export default function SignUp() {
     }
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
     const fdata = new FormData(event.currentTarget);
      try {
       const data= await axios.post('https://twitter-nackend-git-main-harshprateek39.vercel.app/api/v1/auth/register',{
@@ -46,14 +51,30 @@ export default function SignUp() {
         password: fdata.get('password'),
         image: selectedImage
       });
-      alert("User Registered")
+       toast.info("User Registered",{ position:'top-center'});
+      
+       setTimeout(() => {
+         navigate('/login');
+       }, 1000);
      } catch (error) {
-       console.log("cerror", error);
+     
+       toast.error("Server Error",{ position:'top-center'});
+        setSelectedImage(null);
+        setTimeout(() => {
+           navigate('/register');
+        }, 1000);
+     }
+     finally{
+      setLoading(false);
      }
   };  
 
   return (
     <ThemeProvider theme={defaultTheme}>
+    <ToastContainer></ToastContainer>
+    {loading&&<div className=' bg-black/50 fixed h-[100vh] w-[100vw] z-20 flex justify-center items-center backdrop-blur-sm top-0 left-0'>
+      <LoadingIcons.BallTriangle></LoadingIcons.BallTriangle>
+    </div>}
       <Container component="main" maxWidth="xs" className=' bg-white rounded-lg 
       '>
         <CssBaseline />
